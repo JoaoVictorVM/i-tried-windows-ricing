@@ -1,0 +1,43 @@
+# ================================================================
+# Configuração do Starship (prompt do terminal)
+# Objetivo: ícone de pasta + caminho numa linha, seta na de baixo,
+# sem mais nada aparecendo — visual limpo, igual à imagem de referência.
+# Mantido por JV
+# ================================================================
+
+# Formato geral do prompt. Aqui a gente decide exatamente o que aparece:
+# só o módulo de diretório, quebra de linha, e o caractere de digitação
+# (a seta). Qualquer outro módulo que o Starship normalmente mostraria
+# (git, versão de linguagem detectada na pasta, etc.) fica de fora,
+# mesmo que ele detecte esse contexto — porque não tá listado aqui.
+format = """
+$directory
+$character"""
+
+# Deixa (ou não) uma linha em branco antes de cada prompt novo.
+# Troque pra "false" se quiser os comandos mais colados um no outro.
+add_newline = true
+
+# ----------------------------------------------------------------
+# MÓDULO: diretório atual
+# ----------------------------------------------------------------
+[directory]
+# O ícone de pasta é escrito aqui como código Unicode (\uf07b), não
+# como o caractere colado direto — assim ele não corre risco de se
+# perder por causa da codificação do Notepad. \uf07b é o glifo de
+# pasta da Nerd Font (nf-fa-folder). $path já sai como "~" quando
+# você tá na pasta do usuário, igual na imagem de referência.
+format = "[ \uf07b  $path]($style) "
+style = "bold cyan"
+
+# Quantos níveis de pasta mostrar antes de truncar (corta o caminho
+# se ele for muito comprido, pra não estourar a linha)
+truncation_length = 3
+truncate_to_repo = true
+
+# ----------------------------------------------------------------
+# MÓDULO: caractere de digitação (a "seta")
+# ----------------------------------------------------------------
+[character]
+success_symbol = "[→](bold white)"   # quando o último comando deu certo
+error_symbol = "[→](bold red)"       # quando o último comando deu erro
