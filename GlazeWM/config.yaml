@@ -1,0 +1,296 @@
+#      _ __     __
+#     | |\ \   / /
+#     | | \ \ / /
+#  _  | |  \ V /
+# | |_| |   \_/
+#  \___/
+#
+# Configuração do GlazeWM (window manager tiling para Windows)
+
+# =============================================================
+# GERAL
+# Configurações globais de comportamento do WM
+# =============================================================
+general:
+  # Comandos executados assim que o GlazeWM inicia.
+  # Aqui ele roda o "zebar" (barra de status/topbar usada no ricing).
+  startup_commands: ["shell-exec zebar"]
+
+  # Se true, o foco muda automaticamente pra janela que está embaixo do
+  # cursor do mouse (estilo "focus follows mouse"). Aqui está desativado,
+  # ou seja, o foco só muda quando você usa as teclas de atalho.
+  focus_follows_cursor: false
+
+  # Se true, ao focar a workspace que já está em foco, ele alterna de volta
+  # pra última workspace usada (tipo um "alt+tab" de workspace). Desativado.
+  toggle_workspace_on_refocus: false
+
+  # Controla se o cursor do mouse pula automaticamente de posição quando
+  # o foco muda (útil em setups com múltiplos monitores).
+  cursor_jump:
+    enabled: true
+    # Quando o cursor deve pular:
+    # - "monitor_focus": só pula quando o foco muda de monitor
+    # - "window_focus": pula toda vez que o foco muda de janela
+    trigger: "window_focus"
+
+# =============================================================
+# GAPS (espaçamentos)
+# Define o "respiro" entre as janelas e entre as janelas e a borda da tela
+# =============================================================
+gaps:
+  # Espaço entre janelas vizinhas (lado a lado)
+  inner_gap: "10px"
+
+  # Espaço entre as janelas e a borda da tela, definido por lado
+  outer_gap:
+    top: "50px"    # maior aqui, provavelmente pra dar espaço pra topbar/zebar
+    right: "5px"
+    bottom: "5px"
+    left: "10px"
+
+# =============================================================
+# EFEITOS VISUAIS DAS JANELAS
+# Bordas coloridas pra diferenciar janela focada das demais
+# =============================================================
+window_effects:
+  # Efeito aplicado na janela que está em foco no momento
+  focused_window:
+    border:
+      enabled: true
+      color: "#E63462"   # cor de destaque (rosa/vermelho) - EXCLUSIVO Windows 11
+
+  # Efeito aplicado em todas as outras janelas (fora de foco)
+  other_windows:
+    border:
+      enabled: true
+      color: "#a1a1a1"   # cinza neutro
+
+# =============================================================
+# COMPORTAMENTO DAS JANELAS
+# Define o estado padrão em que novas janelas nascem
+# =============================================================
+window_behavior:
+  # Estado inicial de uma janela nova: "tiling" (encaixada na grade) ou
+  # "floating" (flutuante, solta na tela)
+  initial_state: "tiling"
+
+  # Valores padrão usados quando uma janela muda de estado
+  # (ex: ao usar os comandos "set-floating", "set-fullscreen" etc.)
+  state_defaults:
+    floating:
+      centered: true       # janela floating nasce centralizada na tela
+      shown_on_top: false  # não fica "always on top" por padrão
+    fullscreen:
+      maximized: false     # usa fullscreen de verdade em vez de maximizar
+      shown_on_top: false  # não fica "always on top" por padrão
+
+# =============================================================
+# WORKSPACES
+# Lista das áreas de trabalho virtuais disponíveis (tipo desktops virtuais)
+# =============================================================
+workspaces:
+  - name: "1"
+  - name: "2"
+  - name: "3"
+  - name: "4"
+  - name: "5"
+  - name: "6"
+  - name: "7"
+  - name: "8"
+  - name: "9"
+
+# =============================================================
+# REGRAS DE JANELA
+# Exceções: janelas que o GlazeWM deve ignorar e não gerenciar/tiling
+# =============================================================
+window_rules:
+  - commands: ["ignore"]
+    match:
+      # Ignora qualquer janela do processo "zebar" (a própria barra de status)
+      - window_process: {equals: "zebar"}
+
+      # Ignora janelas de Picture-in-Picture de navegadores
+      # (ex: PiP do YouTube no Chrome/Firefox)
+      - window_title: {regex: "[Pp]icture.in.[Pp]icture"}
+        window_class: {regex: "Chrome_WidgetWin_1|MozillaDialogClass"}
+
+      # Ignora o painel de acentos do PowerToys (PowerAccent)
+      - window_process: {equals: "PowerToys.PowerAccent"}
+
+      # Ignora janelas do app "Lively" (wallpaper animado)
+      - window_process: {equals: "Lively"}
+        window_class: {regex: "HwndWrapper*"}
+
+# =============================================================
+# MODOS DE BINDING (binding modes)
+# Modos alternativos de atalhos, ativados/desativados sob demanda
+# =============================================================
+binding_modes:
+  # Modo "resize": enquanto ativo, HJKL/setas redimensionam a janela focada
+  # em vez de mover o foco. Útil pra ajustar tamanho sem decorar teclas.
+  - name: "resize"
+    keybindings:
+      - commands: ["resize --width -2%"]
+        bindings: ["h", "left"]
+      - commands: ["resize --width +2%"]
+        bindings: ["l", "right"]
+      - commands: ["resize --height +2%"]
+        bindings: ["k", "up"]
+      - commands: ["resize --height -2%"]
+        bindings: ["j", "down"]
+      # Enter ou Esc sai do modo resize e volta pros atalhos normais
+      - commands: ["wm-disable-binding-mode --name resize"]
+        bindings: ["escape", "enter"]
+
+  # Modo "pause": desativa TODOS os atalhos, exceto o que sai do modo.
+  # Bom pra usar programas que têm atalhos conflitando com o WM
+  # (ex: jogos, editores com muitos shortcuts).
+  - name: "pause"
+    keybindings:
+      - commands: ["wm-disable-binding-mode --name pause"]
+        bindings: ["alt+shift+p"]
+
+# =============================================================
+# KEYBINDINGS (atalhos globais)
+# =============================================================
+keybindings:
+  # --- Navegação de foco entre janelas ---
+  - commands: ["focus --direction left"]
+    bindings: ["alt+h", "alt+left"]
+  - commands: ["focus --direction right"]
+    bindings: ["alt+l", "alt+right"]
+  - commands: ["focus --direction up"]
+    bindings: ["alt+k", "alt+up"]
+  - commands: ["focus --direction down"]
+    bindings: ["alt+j", "alt+down"]
+
+  # --- Mover a janela focada de posição (troca de lugar na grade) ---
+  - commands: ["move --direction left"]
+    bindings: ["alt+shift+h", "alt+shift+left"]
+  - commands: ["move --direction right"]
+    bindings: ["alt+shift+l", "alt+shift+right"]
+  - commands: ["move --direction up"]
+    bindings: ["alt+shift+k", "alt+shift+up"]
+  - commands: ["move --direction down"]
+    bindings: ["alt+shift+j", "alt+shift+down"]
+
+  # --- Redimensionar a janela focada direto (sem entrar no modo resize) ---
+  - commands: ["resize --width -2%"]
+    bindings: ["alt+u"]
+  - commands: ["resize --width +2%"]
+    bindings: ["alt+p"]
+  - commands: ["resize --height +2%"]
+    bindings: ["alt+o"]
+  - commands: ["resize --height -2%"]
+    bindings: ["alt+i"]
+
+  # --- Ativa o modo "resize" (alternativa via HJKL/setas, definido acima) ---
+  - commands: ["wm-enable-binding-mode --name resize"]
+    bindings: ["alt+r"]
+
+  # --- Ativa o modo "pause" (desliga os atalhos até apertar de novo) ---
+  - commands: ["wm-enable-binding-mode --name pause"]
+    bindings: ["alt+shift+p"]
+
+  # --- Alterna a direção do tiling (define onde a próxima janela vai encaixar) ---
+  - commands: ["toggle-tiling-direction"]
+    bindings: ["alt+v"]
+
+  # --- Alterna a janela focada para floating (flutuante) e centralizada ---
+  - commands: ["toggle-floating --centered"]
+    bindings: ["alt+shift+space"]
+
+  # --- Alterna a janela focada de volta para tiling (encaixada na grade) ---
+  - commands: ["toggle-tiling"]
+    bindings: ["alt+t"]
+
+  # --- Alterna a janela focada para fullscreen ---
+  - commands: ["toggle-fullscreen"]
+    bindings: ["alt+f"]
+
+  # --- Minimiza a janela focada ---
+  - commands: ["toggle-minimized"]
+    bindings: ["alt+m"]
+
+  # --- Fecha a janela focada ---
+  - commands: ["close"]
+    bindings: ["alt+shift+q"]
+
+  # --- Encerra o processo do GlazeWM com segurança ---
+  - commands: ["wm-exit"]
+    bindings: ["alt+shift+e"]
+
+  # --- Recarrega o arquivo de configuração sem precisar reiniciar o WM ---
+  - commands: ["wm-reload-config"]
+    bindings: ["alt+shift+r"]
+
+  # --- Força o redesenho de todas as janelas (corrige glitches visuais) ---
+  - commands: ["wm-redraw"]
+    bindings: ["alt+enter"]
+
+  # --- Abre um terminal CMD rodando o script warp.bat ---
+  # ATENÇÃO: esse binding também usa "alt+enter", igual ao "wm-redraw" logo
+  # acima. Como os dois estão no mesmo atalho, só um vai de fato disparar
+  # (o GlazeWM processa na ordem do arquivo). Se quiser os dois funcionando,
+  # troque a tecla de um deles.
+  - commands: ["shell-exec C:/Windows/System32/cmd.exe /c C:/Users/vini6/OneDrive/Desktop/warp.bat"]
+    bindings: ["alt+enter"]
+
+  # --- Navegar entre workspaces em sequência ---
+  - commands: ["focus --next-workspace"]
+    bindings: ["alt+s"]
+  - commands: ["focus --prev-workspace"]
+    bindings: ["alt+a"]
+  - commands: ["focus --recent-workspace"]
+    bindings: ["alt+d"]
+
+  # --- Ir direto pra uma workspace específica (1 a 9) ---
+  - commands: ["focus --workspace 1"]
+    bindings: ["alt+1"]
+  - commands: ["focus --workspace 2"]
+    bindings: ["alt+2"]
+  - commands: ["focus --workspace 3"]
+    bindings: ["alt+3"]
+  - commands: ["focus --workspace 4"]
+    bindings: ["alt+4"]
+  - commands: ["focus --workspace 5"]
+    bindings: ["alt+5"]
+  - commands: ["focus --workspace 6"]
+    bindings: ["alt+6"]
+  - commands: ["focus --workspace 7"]
+    bindings: ["alt+7"]
+  - commands: ["focus --workspace 8"]
+    bindings: ["alt+8"]
+  - commands: ["focus --workspace 9"]
+    bindings: ["alt+9"]
+
+  # --- Mover a workspace inteira (com a janela focada) para outro monitor ---
+  - commands: ["move-workspace --direction left"]
+    bindings: ["alt+shift+a"]
+  - commands: ["move-workspace --direction right"]
+    bindings: ["alt+shift+f"]
+  - commands: ["move-workspace --direction up"]
+    bindings: ["alt+shift+d"]
+  - commands: ["move-workspace --direction down"]
+    bindings: ["alt+shift+s"]
+
+  # --- Mover a janela focada para uma workspace específica e já ir junto ---
+  - commands: ["move --workspace 1", "focus --workspace 1"]
+    bindings: ["alt+shift+1"]
+  - commands: ["move --workspace 2", "focus --workspace 2"]
+    bindings: ["alt+shift+2"]
+  - commands: ["move --workspace 3", "focus --workspace 3"]
+    bindings: ["alt+shift+3"]
+  - commands: ["move --workspace 4", "focus --workspace 4"]
+    bindings: ["alt+shift+4"]
+  - commands: ["move --workspace 5", "focus --workspace 5"]
+    bindings: ["alt+shift+5"]
+  - commands: ["move --workspace 6", "focus --workspace 6"]
+    bindings: ["alt+shift+6"]
+  - commands: ["move --workspace 7", "focus --workspace 7"]
+    bindings: ["alt+shift+7"]
+  - commands: ["move --workspace 8", "focus --workspace 8"]
+    bindings: ["alt+shift+8"]
+  - commands: ["move --workspace 9", "focus --workspace 9"]
+    bindings: ["alt+shift+9"]
