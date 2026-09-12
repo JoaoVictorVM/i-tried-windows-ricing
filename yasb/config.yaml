@@ -1,0 +1,264 @@
+# ================================================================
+# Configuração do YASB (Yet Another Status Bar)
+# Layout: workspaces + apps abertos (esquerda) | relógio (centro) |
+# mídia + tray + config rápida + wallpaper (direita)
+# Mantido por JV
+# ================================================================
+
+watch_stylesheet: true
+watch_config: true
+debug: false
+
+# ----------------------------------------------------------------
+# INTEGRAÇÃO COM O KOMOREBI
+# Comandos que o YASB roda pra iniciar/parar/recarregar o Komorebi
+# junto com a própria barra (usando o WHKD como daemon de atalhos)
+# ----------------------------------------------------------------
+komorebi:
+  start_command: "komorebic start --whkd"
+  stop_command: "komorebic stop --whkd"
+  reload_command: "komorebic stop --whkd && komorebic start --whkd"
+
+# ----------------------------------------------------------------
+# BARRA
+# Configuração estrutural da barra em si (tamanho, posição, efeitos
+# de janela). As cores ficam no styles.css, não aqui.
+# ----------------------------------------------------------------
+bars:
+  primary-bar:
+    enabled: true
+    screens: ["*"]
+    class_name: "yasb-bar"
+    alignment:
+      position: "top"
+      center: false
+    blur_effect:
+      enabled: true
+      acrylic: false
+      dark_mode: true
+      round_corners: false
+      border_color: "None"
+    window_flags:
+      always_on_top: true
+      windows_app_bar: true
+      hide_on_fullscreen: true
+    dimensions:
+      width: "100%"
+      height: 35
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    # Aqui é onde a lista de widgets pedida entra: cada nome precisa
+    # ter uma definição correspondente lá embaixo em "widgets:".
+    widgets:
+      left:
+        - "komorebi_workspaces" # Área de trabalho
+        - "taskbar" # Ícones dos aplicativos abertos
+      center:
+        - "clock" # Data / hora / dia da semana
+      right:
+        - "media" # O que está tocando
+        - "systray" # Ícones ocultos
+        - "volume" # Ícone de áudio
+        - "wifi" # Ícone de rede
+        - "language" # Ícone de idioma/teclado
+        - "wallpapers" # Ícone de trocar wallpaper
+
+# ================================================================
+# WIDGETS
+# ================================================================
+widgets:
+  # --------------------------------------------------------------
+  # Áreas de trabalho (integra direto com o Komorebi)
+  # --------------------------------------------------------------
+  komorebi_workspaces:
+    type: "komorebi.workspaces.WorkspaceWidget"
+    options:
+      label_offline: "\u26a1 Offline"
+      # Os três estados de cada workspace, em formas diferentes (não
+      # cores) pra dar pra distinguir mesmo no monocromático:
+      # vazia = círculo vazado, com janela = losango, em foco = círculo cheio
+      label_workspace_btn: "\u25cb"
+      label_workspace_active_btn: "\u25cf"
+      label_workspace_populated_btn: "\u25c6"
+      label_default_name: "{index}"
+      label_zero_index: false
+      hide_empty_workspaces: true
+      hide_if_offline: true
+      animation: true
+
+  # --------------------------------------------------------------
+  # Ícones dos aplicativos abertos (funciona como uma taskbar normal)
+  # --------------------------------------------------------------
+  taskbar:
+    type: "yasb.taskbar.TaskbarWidget"
+    options:
+      icon_size: 16
+      animation:
+        enabled: true
+        duration: 200
+      tooltip: true
+      show_only_visible: true
+      # Desativado: com o Komorebi gerenciando as janelas, o filtro
+      # "rigoroso" pode estar rejeitando elas por não baterem 100%
+      # com o que o Windows considera uma janela "normal" (mesmo
+      # problema que tivemos com o WezTerm + GlazeWM antes).
+      strict_filtering: false
+      ignore_apps:
+        processes: []
+        titles: []
+        classes: []
+      container_padding:
+        top: 0
+        left: 6
+        bottom: 0
+        right: 6
+
+  # --------------------------------------------------------------
+  # Data / hora / dia da semana
+  # --------------------------------------------------------------
+  clock:
+    type: "yasb.clock.ClockWidget"
+    options:
+      # %A = dia da semana por extenso, segue o idioma do Windows
+      label: "{%A, %d %b  %H:%M}"
+      label_alt: "{%A, %d %B %Y  %H:%M:%S}"
+      timezones: []
+      calendar:
+        alignment: "center"
+
+  # --------------------------------------------------------------
+  # O que está tocando no momento
+  # --------------------------------------------------------------
+  media:
+    type: "yasb.media.MediaWidget"
+    options:
+      label: "{title}"
+      label_alt: "{artist}"
+      max_field_size:
+        label: 25
+        label_alt: 25
+      show_thumbnail: false
+      controls_only: false
+      controls_left: true
+      hide_empty: true
+      thumbnail_alpha: 250
+      thumbnail_padding: 8
+      thumbnail_corner_radius: 0
+      icons:
+        prev_track: "\uf048"
+        next_track: "\uf051"
+        play: "\uf04b"
+        pause: "\uf04c"
+
+  # --------------------------------------------------------------
+  # Ícones ocultos (system tray)
+  # --------------------------------------------------------------
+  systray:
+    type: "yasb.systray.SystrayWidget"
+    options:
+      class_name: "systray"
+      label_collapsed: "\u25bc"
+      label_expanded: "\u25b6"
+      label_position: "right"
+      icon_size: 16
+      pin_click_modifier: "alt"
+      show_in_popup: false
+      icons_per_row: 4
+      popup:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "None"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+
+  # --------------------------------------------------------------
+  # Volume
+  # --------------------------------------------------------------
+  volume:
+    type: "yasb.volume.VolumeWidget"
+    options:
+      label: "<span>{icon}</span> {level}"
+      label_alt: "{volume}"
+      volume_icons:
+        - "\ueee8" # mudo
+        - "\uf026" # 0-10%
+        - "\uf027" # 11-30%
+        - "\uf027" # 31-60%
+        - "\uf028" # 61-100%
+      callbacks:
+        on_right: "exec cmd.exe /c start ms-settings:sound"
+
+  # --------------------------------------------------------------
+  # Rede / Wi-Fi
+  # --------------------------------------------------------------
+  wifi:
+    type: "yasb.wifi.WifiWidget"
+    options:
+      label: "<span>{wifi_icon}</span>"
+      label_alt: "{wifi_name} {wifi_strength}%"
+      update_interval: 5000
+      wifi_icons:
+        - "\udb82\udd2e" # sem sinal
+        - "\udb82\udd1f"
+        - "\udb82\udd22"
+        - "\udb82\udd25"
+        - "\udb82\udd28" # sinal cheio
+      callbacks:
+        on_left: "exec cmd.exe /c start ms-settings:network"
+
+  # --------------------------------------------------------------
+  # Idioma / layout de teclado
+  # --------------------------------------------------------------
+  language:
+    type: "yasb.language.LanguageWidget"
+    options:
+      label: "{lang[language_code]}-{lang[country_code]}"
+      label_alt: "{lang[full_name]}"
+      update_interval: 5
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+      language_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "None"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_layout_icon: true
+        layout_icon: "\uf11c"
+
+  # --------------------------------------------------------------
+  # Trocar wallpaper
+  # --------------------------------------------------------------
+  wallpapers:
+    type: "yasb.wallpapers.WallpapersWidget"
+    options:
+      label: "<span>\udb83\ude09</span>"
+      # ATENÇÃO: troque pelo caminho real da sua pasta de wallpapers
+      # (esse é só um placeholder com o seu usuário)
+      image_path: "C:\\Users\\mart1\\Pictures\\Wallpapers"
+      change_automatically: false
+      update_interval: 60
+      gallery:
+        enabled: true
+        blur: true
+        image_width: 296
+        image_per_page: 6
+        show_buttons: true
+        orientation: "portrait"
+        image_spacing: 10
+        lazy_load: true
+        lazy_load_delay: 10
+        lazy_load_fadein: 200
+        image_corner_radius: 20
+        enable_cache: true
