@@ -1,0 +1,113 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.41/schema.json",
+
+  // ================================================================
+  // GERAL
+  // Comportamento global do Komorebi
+  // ================================================================
+
+  // Caminho do arquivo de regras específicas por aplicativo (ex: forçar
+  // certas janelas a abrir sempre floating). O Komorebi cria esse
+  // arquivo sozinho na primeira execução, se ele ainda não existir.
+  "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
+
+  // Como as janelas de workspaces que não estão em foco ficam escondidas.
+  // "Cloak" é o método mais suave visualmente: some sem efeito de
+  // minimizar/restaurar.
+  "window_hiding_behaviour": "Cloak",
+
+  // Se o foco muda sozinho pra janela que está embaixo do cursor do
+  // mouse. Desativado, igual fizemos no GlazeWM — foco só muda com
+  // atalho de teclado.
+  "mouse_follows_focus": false,
+
+  // ================================================================
+  // TRANSPARÊNCIA
+  // ================================================================
+  "transparency": true,
+  // Vai de 0 (totalmente transparente) a 255 (totalmente opaco).
+  // 252 é quase opaco — só uma transparência bem sutil nas janelas.
+  "transparency_alpha": 252,
+
+  // ================================================================
+  // ESPAÇAMENTO (padding)
+  // ================================================================
+  // Espaço entre a borda da tela e as janelas da workspace
+  "default_workspace_padding": 4,
+  // Espaço entre janelas vizinhas dentro do mesmo container
+  "default_container_padding": 4,
+
+  // ================================================================
+  // BORDAS
+  // Paleta monocromática (preto/branco/cinza), no mesmo padrão usado
+  // no GlazeWM e no Zebar deste setup.
+  // ================================================================
+  "border": true,
+  "border_width": 2,
+  "border_offset": 0,
+  "border_colours": {
+    // Janela única em foco (estado mais comum de tiling)
+    "single": "#f2f2f2",
+    // Qualquer janela fora de foco — cinza escuro, discreto
+    "unfocused": "#4d4d4d",
+    // Janelas floating (fora do tiling) — cinza médio, pra diferenciar
+    // visualmente de uma janela tiling em foco sem sair do mono
+    "floating": "#9a9a9a"
+  },
+
+  // ================================================================
+  // ANIMAÇÕES
+  // ================================================================
+  "animation": {
+    "enabled": true,
+    // Duração da animação, em milissegundos
+    "duration": 150,
+    // Quadros por segundo da animação
+    "fps": 300,
+    "style": {
+      // Curva de easing usada no movimento das janelas
+      "movement": "EaseInOutQuad",
+      // Curva de easing usada na transição de transparência
+      "transparency": "Linear"
+    }
+  },
+
+  // ================================================================
+  // MONITORES E WORKSPACES
+  // Cada monitor tem sua própria lista de workspaces, cada uma com
+  // nome e layout de tiling independentes.
+  // ================================================================
+  "monitors": [
+    // Monitor 1 (index 0)
+    {
+      "workspaces": [
+        { "name": "I", "layout": "BSP" },
+        { "name": "II", "layout": "Grid" },
+        { "name": "III", "layout": "HorizontalStack" }
+      ]
+    },
+    // Monitor 2 (index 1) — monitor vertical: "Rows" empilha as janelas
+    // uma em cima da outra, em vez de dividir lado a lado como o BSP/Grid
+    // fariam. A "2" é a workspace usada de verdade nesse monitor.
+    {
+      "workspaces": [
+        { "name": "Home", "layout": "Rows" },
+        { "name": "2", "layout": "Rows" },
+        { "name": "3", "layout": "HorizontalStack" }
+      ]
+    }
+  ],
+
+  // ================================================================
+  // REGRAS DE IGNORE
+  // Aplicativos que o Komorebi nunca deve tentar tilar/gerenciar
+  // ================================================================
+  "ignore_rules": [
+    { "kind": "Exe", "id": "explorer.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "ACShadows.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "Overwatch.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "Photos.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "PotPlayerMini64.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "Files.exe", "matching_strategy": "Equals" }
+  ]
+}
