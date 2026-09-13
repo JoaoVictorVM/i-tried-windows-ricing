@@ -1,43 +1,43 @@
-# YASB (Yet Another Status Bar)
+# YASB
 
-Barra de status usada junto com o [Komorebi](../komorebi), alternativa ao [Zebar](../zebar) com mais widgets prontos (taskbar, systray, wifi, idioma, etc). Parte da **v2** deste setup.
+Barra de status usada junto com o [Komorebi](../komorebi). Duas versões nesta pasta — **escolha uma**.
 
-## Instalação
+## Versões
+
+| Versão | Estilo | Requisito |
+|---|---|---|
+| [`v1/`](./v1) | Barra tradicional, retângulo cheio. Workspaces, taskbar, mídia, systray, volume, wifi, idioma, wallpaper, cava, power menu | Qualquer versão do YASB |
+| [`v2/`](./v2) | Estilo "adaptive": widgets agrupados em "ilhas" flutuantes com cantos arredondados, mais completo (quick launch, control center, visualizador de áudio nativo, layout do Komorebi) | **YASB 2.0.7 ou mais recente** |
+
+## ⚠️ Antes de usar a v2
+
+O estilo `"adaptive"` (as ilhas flutuantes) só existe a partir da versão **2.0.7** do YASB. Se você tentar usar a config da v2 numa versão mais antiga, vai dar erro de `"Extra inputs are not permitted"` no `style` e no `system_colors`.
+
+Atualize primeiro:
 
 ```powershell
-winget install amnweb.YASBReborn
+winget upgrade amnweb.YASBReborn
 ```
 
-> Se o comando acima não encontrar o pacote, procure com `winget search yasb` — o nome do pacote muda ocasionalmente entre versões do projeto.
+Se o nome exato não bater, `winget upgrade` sozinho lista tudo que tem atualização pendente — procura o YASB na lista.
 
 ## Onde vai a configuração
+
+Mesmo caminho pras duas versões (só o conteúdo dos arquivos muda):
 
 ```
 %userprofile%\.config\yasb\config.yaml
 %userprofile%\.config\yasb\styles.css
 ```
 
-## Layout de widgets
+## O que as duas têm em comum
 
-| Posição | Widgets |
-|---|---|
-| Esquerda | Áreas de trabalho (Komorebi) → Ícones dos apps abertos (taskbar) |
-| Centro | Data / hora / dia da semana |
-| Direita | Mídia tocando → Ícones ocultos (systray) → Volume → Wi-Fi → Idioma → Trocar wallpaper |
+- Paleta monocromática (preto + branco com opacidade), mesmo padrão do resto do rice
+- `border_color` sempre `None`/`none` nos popups, pra não vazar a cor de destaque do Windows
+- Caminho de wallpaper já ajustado — confira se ainda bate com a sua pasta antes de usar
 
-## O que essa config faz
+## Diferenças da v2
 
-- Paleta monocromática própria (preto + branco com opacidade), independente das ~20 variáveis de cor do tema original — mais enxuta e consistente com o Zebar e as bordas do Komorebi
-- Áreas de trabalho em formas diferentes por estado (não cor): círculo vazado = vazia, losango = com janela, círculo cheio = em foco. Some workspace vazias da barra (`hide_empty_workspaces: true`)
-- Ícones ocultos aparecem direto na barra, sem dropdown (`show_in_popup: false`)
-- `strict_filtering: false` no taskbar — necessário porque o Komorebi altera propriedades da janela, e o filtro rigoroso padrão do YASB rejeitava elas (mesmo tipo de problema que tivemos com WezTerm + GlazeWM)
-
-## ⚠️ Antes de usar
-
-- **Wallpaper**: `image_path` no `config.yaml` precisa apontar pra sua pasta de wallpapers de verdade
-- **Espaçamento das pontas**: o padding fica no `styles.css` (`.container-left` / `.container-right`), **não** no `padding` do `config.yaml` — aquela opção encolhe o fundo da barra inteira e deixa o wallpaper aparecendo nas pontas, em vez de só afastar os itens
-- Ícones de apps na taskbar e na bandeja mantêm as cores originais de cada programa — o Windows não permite recolorir ícone de terceiro
-
-## Recarregar depois de editar
-
-Reinicie o YASB, ou use `yasbc reload` se tiver o CLI instalado.
+- Layout "adaptive": cada grupo de widgets vira uma ilha flutuante com cantos arredondados, em vez de uma barra retangular única
+- Widgets extras: `quick_launch` (busca de apps, `Alt+Space`), `control_center` (central de ações estilo Windows 11, com sliders de volume/brilho/microfone), `audio_visualizer` (nativo do YASB, não precisa do Cava instalado), `komorebi_active_layout` (mostra o layout de tiling atual)
+- `system_colors: true` habilitado (não usado ativamente pela nossa paleta, mas disponível caso queira puxar a cor de destaque do Windows em algum widget específico depois)

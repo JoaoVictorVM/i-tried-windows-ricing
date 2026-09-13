@@ -59,12 +59,14 @@ bars:
       center:
         - "clock" # Data / hora / dia da semana
       right:
+        - "cava" # Visualizador de áudio
         - "media" # O que está tocando
         - "systray" # Ícones ocultos
         - "volume" # Ícone de áudio
         - "wifi" # Ícone de rede
         - "language" # Ícone de idioma/teclado
         - "wallpapers" # Ícone de trocar wallpaper
+        - "power_menu" # Menu de desligar/reiniciar
 
 # ================================================================
 # WIDGETS
@@ -244,9 +246,7 @@ widgets:
     type: "yasb.wallpapers.WallpapersWidget"
     options:
       label: "<span>\udb83\ude09</span>"
-      # ATENÇÃO: troque pelo caminho real da sua pasta de wallpapers
-      # (esse é só um placeholder com o seu usuário)
-      image_path: "C:\\Users\\mart1\\Pictures\\Wallpapers"
+      image_path: "D:\\Jv\\Wallpaper"
       change_automatically: false
       update_interval: 60
       gallery:
@@ -262,3 +262,50 @@ widgets:
         lazy_load_fadein: 200
         image_corner_radius: 20
         enable_cache: true
+
+  # --------------------------------------------------------------
+  # Visualizador de áudio (Cava)
+  # --------------------------------------------------------------
+  cava:
+    type: "yasb.cava.CavaWidget"
+    options:
+      bar_height: 12
+      gradient: 1
+      reverse: 0
+      sensitivity: 100
+      # Gradiente do escuro pro claro, em vez das cores azul/roxo
+      # originais — mantém a mesma ideia visual (barra "acendendo"
+      # conforme o volume), só que em cinza
+      foreground: "#e6e6e6"
+      gradient_color_1: "#6e6e6e"
+      gradient_color_2: "#9a9a9a"
+      gradient_color_3: "#e6e6e6"
+      bars_number: 8
+      bar_spacing: 2
+      bar_width: 4
+      sleep_timer: 0
+      hide_empty: true
+      container_padding:
+        top: 0
+        left: 0
+        bottom: 0
+        right: 0
+
+  # --------------------------------------------------------------
+  # Menu de desligar / reiniciar
+  # --------------------------------------------------------------
+  power_menu:
+    type: "yasb.power_menu.PowerMenuWidget"
+    options:
+      label: "\uf011"
+      uptime: true
+      blur: false
+      blur_background: true
+      animation_duration: 250
+      button_row: 5 # quantos botões por linha no menu (min 1, max 5)
+      buttons:
+        signout: ["\udb80\udf43", "Sign out"]
+        shutdown: ["\uf011", "Shut Down"]
+        restart: ["\uead2", "Restart"]
+        hibernate: ["\uf28e", "Hibernate"]
+        cancel: ["\udb81\udf3a", "Cancel"]

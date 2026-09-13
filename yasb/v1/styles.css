@@ -275,3 +275,67 @@
 .wallpapers-gallery-image.focused {
   border: 4px solid rgba(255 255 255 / 90%);
 }
+
+/* ================================================================
+ * VISUALIZADOR DE ÁUDIO (Cava)
+ * As barras usam o gradiente definido no config.yaml — aqui só o
+ * espaçamento do widget em si.
+ * ================================================================ */
+.cava-widget {
+  padding: 0;
+  margin-right: 4px;
+}
+
+/* ================================================================
+ * MENU DE DESLIGAR / REINICIAR
+ * ================================================================ */
+.power-menu-widget {
+  padding-left: 0;
+}
+
+.power-menu-widget .label {
+  color: var(--text);
+  font-size: 16px;
+}
+
+/* Popup do menu */
+.uptime {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-family: "Bahnschrift";
+}
+
+.power-menu-popup .button {
+  padding: 0;
+  width: 160px;
+  height: 240px;
+  border-radius: 4px;
+  background-color: var(--overlay-soft);
+  font-family: "Bahnschrift";
+  color: var(--text);
+  border: 4px solid transparent;
+}
+
+.power-menu-popup .button.hover {
+  background-color: var(--overlay-mid);
+  border: 4px solid var(--overlay-mid);
+}
+
+.power-menu-popup .button .label {
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-family: "Bahnschrift";
+}
+
+.power-menu-popup .button .icon {
+  font-size: 64px;
+  padding-top: 54px;
+  color: rgba(255 255 255 / 25%);
+}
+
+/* Botão de cancelar continua igual aos outros — sem cor de aviso
+   separada, pra manter tudo dentro da paleta monocromática */
