@@ -1,15 +1,22 @@
 # PowerShell Profile
 
-O PowerShell tem 4 arquivos de profile diferentes, que rodam em momentos/escopos diferentes. Este setup usa dois deles.
+O PowerShell tem 4 arquivos de profile diferentes. Este repositório usa dois deles, em lugares diferentes:
 
-## Onde vai cada arquivo
+| Arquivo | Onde fica | O que faz |
+|---|---|---|
+| [`profile.ps1`](./profile.ps1) (nesta pasta) | `C:\Users\<VOCE>\Documents\WindowsPowerShell\profile.ps1` | UTF-8 no console + Fastfetch condicional (fora do WezTerm) |
+| `Microsoft.PowerShell_profile.ps1` | `C:\Users\<VOCE>\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1` | Liga o prompt — fica dentro de [`starship/`](../starship) **ou** [`oh-my-posh/`](../oh-my-posh), dependendo de qual você escolher |
 
-| Arquivo deste repositório | Caminho real no Windows |
-|---|---|
-| [`Microsoft.PowerShell_profile.ps1`](./Microsoft.PowerShell_profile.ps1) | `C:\Users\<VOCE>\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1` |
-| [`profile.ps1`](./profile.ps1) | `C:\Users\<VOCE>\Documents\WindowsPowerShell\profile.ps1` |
+Os dois arquivos são lidos juntos toda vez que um shell novo abre — não precisa escolher entre um ou outro aqui.
 
-Pra ver os 4 caminhos possíveis no seu PC (e quais deles já existem), roda:
+## O que o `profile.ps1` desta pasta faz
+
+- Força UTF-8 no console (pra caracteres especiais/acentos não quebrarem)
+- Roda o **Fastfetch** (specs do PC), mas **só fora do WezTerm** — checando a variável de ambiente `WEZTERM_PANE`
+
+> Ajuste o caminho `C:/Users/mart1/.config/fastfetch/config.jsonc` no arquivo pro seu próprio usuário antes de usar.
+
+## Ver os 4 caminhos de profile do seu PC
 
 ```powershell
 $PROFILE.PSObject.Properties | ForEach-Object {
@@ -20,23 +27,6 @@ $PROFILE.PSObject.Properties | ForEach-Object {
 }
 ```
 
-## O que cada arquivo faz
-
-**`Microsoft.PowerShell_profile.ps1`** — só liga o [Starship](../starship):
-
-```powershell
-Invoke-Expression (&starship init powershell)
-```
-
-**`profile.ps1`** — roda antes do Starship. Cuida de:
-
-- Forçar UTF-8 no console (pra caracteres especiais/acentos não quebrarem)
-- Rodar o **Fastfetch** (specs do PC), mas **só fora do WezTerm** — checando a variável de ambiente `WEZTERM_PANE`, que o próprio WezTerm cria em qualquer processo que ele abre
-
-Resultado: abrindo pelo WezTerm → sem Fastfetch, visual limpo. Abrindo pelo PowerShell normal ou Windows Terminal → Fastfetch aparece normal.
-
-> Ajuste o caminho `C:/Users/mart1/.config/fastfetch/config.jsonc` no `profile.ps1` pro seu próprio usuário antes de usar.
-
 ## Depois de editar
 
-Feche **todas** as janelas de terminal abertas (WezTerm, PowerShell, Windows Terminal) e abra de novo — os arquivos de profile só são lidos na abertura do shell.
+Feche **todas** as janelas de terminal abertas (WezTerm, PowerShell, Windows Terminal) e abra de novo.

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 2,
+  "final_space": true,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "#e6e6e6",
+          "background": "transparent",
+          "template": "{{ $bgA := \"#333333\" }}{{ $bgB := \"#1a1a1a\" }}{{ $arrow := \"\\ue0b0\" }}{{ $icon := \"\\uf07b\" }}{{ $parts := splitList \"\\\\\" .Path }}{{ $count := len $parts }}{{ range $i, $p := $parts }}{{ $bg := $bgA }}{{ if eq (mod $i 2) 1 }}{{ $bg = $bgB }}{{ end }}<#e6e6e6,{{ $bg }}> {{ if eq $i 0 }}{{ $icon }} {{ end }}{{ $p }} </>{{ if lt (add $i 1) $count }}{{ $nextBg := $bgA }}{{ if eq (mod (add $i 1) 2) 1 }}{{ $nextBg = $bgB }}{{ end }}<{{ $bg }},{{ $nextBg }}>{{ $arrow }}</>{{ else }}<{{ $bg }},transparent>{{ $arrow }}</>{{ end }}{{ end }}",
+          "properties": {
+            "style": "full",
+            "home_icon": "~"
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#e6e6e6",
+          "foreground_templates": [
+            "{{ if ne .Code 0 }}#ffffff{{ end }}"
+          ],
+          "template": "\n→ "
+        }
+      ]
+    }
+  ]
+}

@@ -6,10 +6,16 @@ try {
     chcp 65001 > $null
 } catch {}
 
-# O WezTerm seta a variável WEZTERM_PANE em qualquer processo que ele abre.
-# Usamos isso pra mostrar o Fastfetch só fora do WezTerm (terminal "normal"),
-# mantendo o visual do WezTerm limpo, sem specs do PC aparecendo.
-if (-not $env:WEZTERM_PANE) {
+# Em vez de checar a variável WEZTERM_PANE (que "vaza" pra qualquer processo
+# filho, tipo um terminal aberto dentro de outro programa que você abriu de
+# dentro do WezTerm), a gente confere quem é o processo PAI DIRETO deste
+# PowerShell. Se for o "wezterm-gui" de verdade, esconde o Fastfetch. Se for
+# outro programa (Zed, Windows Terminal, etc.), mostra normal — mesmo que
+# esse programa tenha sido aberto originalmente de dentro do WezTerm.
+$parentId   = (Get-CimInstance Win32_Process -Filter "ProcessId = $PID").ParentProcessId
+$parentName = (Get-Process -Id $parentId -ErrorAction SilentlyContinue).ProcessName
+
+if ($parentName -ne "wezterm-gui") {
     Clear-Host
     if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
         fastfetch -c "C:/Users/mart1/.config/fastfetch/config.jsonc"

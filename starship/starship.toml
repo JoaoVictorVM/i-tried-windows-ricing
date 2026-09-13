@@ -20,20 +20,31 @@ add_newline = true
 
 # ----------------------------------------------------------------
 # MÓDULO: diretório atual
+# Renderizado como uma "cápsula": dois glifos de meia-lua da Nerd
+# Font (Powerline Extra) nas pontas, coloridos igual ao fundo da
+# cápsula, criando a ilusão de canto arredondado contra o fundo
+# do terminal — mesma técnica usada em temas prontos do Starship
+# e do oh-my-posh (tipo o "pastel-powerline").
 # ----------------------------------------------------------------
 [directory]
-# O ícone de pasta é escrito aqui como código Unicode (\uf07b), não
-# como o caractere colado direto — assim ele não corre risco de se
-# perder por causa da codificação do Notepad. \uf07b é o glifo de
-# pasta da Nerd Font (nf-fa-folder). $path já sai como "~" quando
-# você tá na pasta do usuário, igual na imagem de referência.
-format = "[ \uf07b  $path]($style) "
-style = "bold cyan"
+# \ue0b6 e \ue0b4 são as meias-luas esquerda/direita. \uf07b é o
+# ícone de pasta (mesmo de antes). $path já sai como "~" quando
+# você tá na pasta do usuário.
+format = "[\ue0b6](fg:#333333)[ \uf07b  $path ](bg:#333333 fg:#e6e6e6)[\ue0b4](fg:#333333)"
 
 # Quantos níveis de pasta mostrar antes de truncar (corta o caminho
 # se ele for muito comprido, pra não estourar a linha)
 truncation_length = 3
 truncate_to_repo = true
+
+# Troca a barra "\" padrão do Windows por um separador mais claro
+# visualmente entre os níveis da pasta (ex: "D: › Workspace" em vez
+# de "D:\Workspace"). "\\" aqui representa uma única barra invertida
+# (é a forma de escrever isso em TOML). Essa subtabela precisa vir
+# por último dentro de [directory] — em TOML, depois que uma
+# subtabela é declarada, não dá pra "voltar" pra chaves do pai.
+[directory.substitutions]
+"\\" = " \u203a "
 
 # ----------------------------------------------------------------
 # MÓDULO: caractere de digitação (a "seta")
