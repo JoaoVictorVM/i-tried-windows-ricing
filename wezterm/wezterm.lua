@@ -90,9 +90,42 @@ config.default_cursor_style = "SteadyBar"
 
 -- ----------------------------------------------------------------
 -- ESQUEMA DE CORES
--- Troque à vontade por qualquer nome de tema built-in do WezTerm
--- (lista completa em wezterm.org/colorschemes).
+-- Paleta 100% em escala de cinza, no lugar de um tema pronto (o
+-- "Tokyo Night" que estava aqui tem azul/verde/roxo, fugindo do
+-- padrão monocromático usado no resto do setup). Cada cor do
+-- terminal (as 16 cores ANSI usadas por `ls`, git diff, etc) vira
+-- um tom de cinza diferente, então ainda dá pra distinguir "verde"
+-- de "vermelho" pela intensidade, só que sem matiz nenhuma.
 -- ----------------------------------------------------------------
-config.color_scheme = "Tokyo Night"
+config.colors = {
+	foreground = "#e6e6e6",
+	background = "#0d0d0f",
+	cursor_bg = "#f2f2f2",
+	cursor_fg = "#0d0d0f",
+	cursor_border = "#f2f2f2",
+	selection_bg = "#3a3a3a",
+	selection_fg = "#f2f2f2",
+
+	ansi = {
+		"#1a1a1a", -- preto
+		"#4d4d4d", -- vermelho
+		"#666666", -- verde
+		"#808080", -- amarelo
+		"#999999", -- azul
+		"#b3b3b3", -- magenta
+		"#cccccc", -- ciano
+		"#e6e6e6", -- branco
+	},
+	brights = {
+		"#333333",
+		"#595959",
+		"#737373",
+		"#8c8c8c",
+		"#a6a6a6",
+		"#bfbfbf",
+		"#d9d9d9",
+		"#ffffff",
+	},
+}
 
 return config
