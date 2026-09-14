@@ -1,0 +1,11 @@
+{
+  "theme": "DockLike",
+  "controlStyles[0].target": "Taskbar.ExperienceToggleButton#LaunchListButton[AutomationProperties.AutomationId=StartButton] > Taskbar.TaskListButtonPanel > Border#BackgroundElement",
+  "controlStyles[0].styles[0]": "Background:=<ImageBrush Stretch=\"Uniform\" ImageSource=\"C:\\Users\\mart1\\.config\\windhawk\\archlinux-icon-mono.png\"/>",
+  "controlStyles[1].target": "Taskbar.ExperienceToggleButton#LaunchListButton[AutomationProperties.AutomationId=StartButton] > Taskbar.TaskListButtonPanel > Microsoft.UI.Xaml.Controls.AnimatedVisualPlayer#Icon",
+  "controlStyles[1].styles[0]": "Visibility=Collapsed",
+  "styleConstants[0]": "",
+  "themeResourceVariables[0]": "",
+  "xamlDiagnosticsHandling": "alert",
+  "clickThroughTaskbar": 0
+}
